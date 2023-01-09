@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      input {
+        display: block;
+        clear: both;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Planet Metadata Uploader</h2>
+
+    <label for="uploadUrl">Service :</label>
+    <input id="uploadUrl" autocomplete="off" />
+
+    <label for="tokenId">TokenId :</label>
+    <input id="tokenId" autocomplete="off" />
+
+    <label for="name">Name :</label>
+    <input id="name" autocomplete="off" />
+
+    <label for="description">Description :</label>
+    <input id="demo-des" autocomplete="off" />
+
+    <label for="traits">Traits :</label><br />
+    <textarea
+      id="traits"
+      autocomplete="off"
+      style="width: 170px"
+      rows="5"
+    ></textarea
+    ><br />
+
+    <label for="image">Image :</label>
+    <input type="file" id="demo-image" accept="image/*" />
+
+    <button onclick="onSubmit();">submit</button>
+    <div id="tokenURIs"></div>
+
+    <div id="result"></div>
+
+    <script>
+      async function onSubmit() {}
+
+      // 获取填写数据
+      //     const name = document.getElementById("demo-name").value;
+      //     const description = document.getElementById("demo-des").value;
+      //     const fileContent = document.getElementById("demo-image").files[0];
+      //     if (!name || !description || !fileContent) {
+      //       alert("please input ERC721 info!");
+      //       return;
+      //     }
+
+      //     // 上传图片至 ipfs
+      //     const imageResults = await node.add(fileContent);
+      //     const imgUrl = `${basePath}/${imageResults.path}`;
+      //     const metadata = {
+      //       description,
+      //       name,
+      //       image: imgUrl,
+      //     };
+
+      //     // 上传 matedata
+      //     const metadataResults = await node.add(JSON.stringify(metadata));
+      //     // 创建元素并添加至 dom 节点中
+      //     const tokenURIItemDom = document.createElement("a");
+      //     const metadataResultsPath = `${basePath}${metadataResults.path}`;
+      //     tokenURIItemDom.innerText = metadataResults.path;
+      //     tokenURIItemDom.href = metadataResultsPath;
+      //     tokenURIItemDom.target = "_blank";
+      //     tokenURIItemDom.id = "url";
+      //     const copyButton = document.createElement("button");
+      //     copyButton.id = "copy";
+      //     copyButton.innerText = "copy";
+      //     document.getElementById("tokenURIs").innerHTML = "";
+      //     document
+      //       .getElementById("tokenURIs")
+      //       .append(tokenURIItemDom, copyButton);
+      //     document.getElementById("copy").addEventListener("click", () => {
+      //       selectText("url");
+      //     });
+      //   }
+
+      //   function selectText(element) {
+      //     const text = document.getElementById(element);
+      //     if (document.body.createTextRange) {
+      //       const range = document.body.createTextRange();
+      //       range.moveToElementText(text);
+      //       range.select();
+      //     } else if (window.getSelection) {
+      //       const selection = window.getSelection();
+      //       const range = document.createRange();
+      //       range.selectNodeContents(text);
+      //       selection.removeAllRanges();
+      //       selection.addRange(range);
+      //       document.execCommand("Copy");
+      //     } else {
+      //       alert("none");
+      //     }
+      //   }
+    </script>
+  </body>
+</html>

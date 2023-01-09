@@ -1,0 +1,17 @@
+{
+  "name": "chainide-planetnft-template",
+  "version": "1.0.0",
+  "description": "planetnft template in chainide",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "webapp"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "yarn workspace webapp run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
