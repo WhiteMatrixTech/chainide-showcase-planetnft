@@ -1,15 +1,15 @@
 {
-  "name": "chainide-planetnft-template",
+  "name": "chainide-showcase-planetnft",
   "version": "1.0.0",
   "description": "planetnft template in chainide",
   "main": "index.js",
   "private": true,
   "workspaces": [
-    "webapp"
+    "frontend"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "yarn workspace webapp run dev"
+    "start:dev": "yarn workspace frontend run dev"
   },
   "keywords": [],
   "author": "",
