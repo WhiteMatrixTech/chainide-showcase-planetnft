@@ -5,11 +5,13 @@
   "main": "index.js",
   "private": true,
   "workspaces": [
-    "frontend"
+    "frontend",
+    "backend"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "yarn workspace frontend run dev"
+    "dev:front": "yarn workspace frontend run dev",
+    "dev:back": "yarn workspace backend run dev"
   },
   "keywords": [],
   "author": "",

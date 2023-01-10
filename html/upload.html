@@ -16,29 +16,29 @@
   <body>
     <h2>Planet Metadata Uploader</h2>
 
-    <label for="uploadUrl">Service :</label>
-    <input id="uploadUrl" autocomplete="off" />
+    <label for="uploadUrl">uploadUrl :</label>
+    <input
+      id="uploadUrl"
+      autocomplete="off"
+      value="http://localhost:3001/metadata"
+    />
 
     <label for="tokenId">TokenId :</label>
-    <input id="tokenId" autocomplete="off" />
+    <input id="tokenId" autocomplete="off" value="1" />
 
     <label for="name">Name :</label>
-    <input id="name" autocomplete="off" />
+    <input id="name" autocomplete="off" value="jupiter #1" />
 
     <label for="description">Description :</label>
-    <input id="demo-des" autocomplete="off" />
+    <input id="description" autocomplete="off" value="jupiter #1" />
 
-    <label for="traits">Traits :</label><br />
-    <textarea
-      id="traits"
-      autocomplete="off"
-      style="width: 170px"
-      rows="5"
-    ></textarea
+    <label for="properties">Traits :</label><br />
+    <textarea id="properties" autocomplete="off" style="width: 170px" rows="5">
+[{"trait_type": "rarity","value": "normal"}]</textarea
     ><br />
 
     <label for="image">Image :</label>
-    <input type="file" id="demo-image" accept="image/*" />
+    <input type="file" id="image" accept="image/*" />
 
     <button onclick="onSubmit();">submit</button>
     <div id="tokenURIs"></div>
@@ -46,7 +46,69 @@
     <div id="result"></div>
 
     <script>
-      async function onSubmit() {}
+      async function onSubmit() {
+        try {
+          const { uploadUrl, tokenId, name, description, propertiesJSON } =
+            validateAndGetValue();
+
+          await postData(uploadUrl, {
+            tokenId,
+            name,
+            description,
+            properties: propertiesJSON,
+          });
+        } catch (e) {
+          console.log(e);
+          alert(e.message);
+        }
+      }
+
+      function validateAndGetValue() {
+        const uploadUrl = document.getElementById("uploadUrl").value;
+        if (!uploadUrl) {
+          throw new Error("please fill in the `uploadUrl`");
+        }
+        const tokenId = document.getElementById("tokenId").value;
+        if (!tokenId) {
+          throw new Error("please fill in the `tokenId`");
+        }
+        const name = document.getElementById("name").value;
+        if (!name) {
+          throw new Error("please fill in the `name`");
+        }
+        const description = document.getElementById("description").value;
+        if (!description) {
+          throw new Error("please fill in the `description`");
+        }
+        const properties = document.getElementById("properties").value;
+        let propertiesJSON = [];
+        if (properties) {
+          try {
+            propertiesJSON = JSON.parse(properties);
+          } catch (e) {
+            throw new Error("`properties` cannot be convert to JSON");
+          }
+        }
+
+        return { uploadUrl, tokenId, name, description, propertiesJSON };
+      }
+
+      async function postData(url = "", data = {}) {
+        const response = await fetch(url, {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: "follow",
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify(data),
+        });
+        return response.json();
+      }
 
       // 获取填写数据
       //     const name = document.getElementById("demo-name").value;
