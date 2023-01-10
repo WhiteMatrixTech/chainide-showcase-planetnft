@@ -5,6 +5,10 @@ class MetadataService {
   public metadataList: Metadata[] = [];
 
   public async uploadMetadata(metadata: Metadata): Promise<void> {
+    const index: number = this.metadataList.findIndex(data => data.tokenId == metadata.tokenId);
+    if (index > -1) {
+      this.metadataList.splice(index, 1);
+    }
     this.metadataList.push(metadata);
   }
 

@@ -18,7 +18,9 @@ class MetadataController {
 
   public uploadMetadata = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const file = req.file;
       const metadata: UploadMetadataDto = req.body;
+      metadata.image = file.filename;
       await this.metadataService.uploadMetadata(metadata);
       res.status(200).json({});
     } catch (error) {

@@ -11,5 +11,7 @@ export class UploadMetadataDto {
   @IsString()
   public description: string;
 
+  public image: string;
+
   public properties: Properties;
 }
