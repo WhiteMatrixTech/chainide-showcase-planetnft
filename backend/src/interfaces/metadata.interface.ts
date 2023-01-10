@@ -2,6 +2,7 @@ export interface Metadata {
   tokenId: number;
   name: string;
   description: string;
+  image: string;
   properties: Properties[];
 }
 

@@ -20,8 +20,13 @@ class MetadataController {
     try {
       const file = req.file;
       const metadata: UploadMetadataDto = req.body;
-      metadata.image = file.filename;
-      await this.metadataService.uploadMetadata(metadata);
+      await this.metadataService.uploadMetadata({
+        tokenId: metadata.tokenId,
+        name: metadata.name,
+        description: metadata.description,
+        properties: metadata.properties,
+        image: `${metadata.baseUri}${file.filename}`,
+      });
       res.status(200).json({});
     } catch (error) {
       next(error);
