@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
-import jupiter from "../styles/imgs/jupiter.jpg";
+import moon from "../styles/imgs/moon.jpg";
 import {
   planetContractAbi,
   planetContractAddress,
@@ -43,6 +43,7 @@ export default function Home() {
       const count = 1;
       await contract.mint(count, { value: planetPerPrice.mul(count) });
     } catch (e) {
+      alert(e.message);
       console.log(e);
     } finally {
       setLoading(false);
@@ -94,7 +95,7 @@ export default function Home() {
               className="flex h-9 items-center justify-between"
               aria-label="Global"
             >
-              <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
+              <div className="flex min-w-0 flex-1 justify-end">
                 {currentAddress ? (
                   currentAddress
                 ) : (
@@ -136,8 +137,8 @@ export default function Home() {
                   </h1>
                   <p className="mt-6 text-lg leading-8 text-gray-600 text-center">
                     <Image
-                      src={jupiter}
-                      alt="jupiter"
+                      src={moon}
+                      alt="moon"
                       width={300}
                       className="m-auto"
                     />

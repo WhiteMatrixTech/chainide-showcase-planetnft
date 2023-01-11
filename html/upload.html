@@ -16,12 +16,8 @@
   <body>
     <h2>Planet Metadata Uploader</h2>
 
-    <label for="uploadUrl">uploadUrl :</label>
-    <input
-      id="uploadUrl"
-      autocomplete="off"
-      value="http://localhost:3001/metadata"
-    />
+    <label for="baseUri">baseUri :</label>
+    <input id="baseUri" autocomplete="off" value="http://localhost:3001/" />
 
     <label for="tokenId">TokenId :</label>
     <input id="tokenId" autocomplete="off" value="1" />
@@ -30,10 +26,14 @@
     <input id="name" autocomplete="off" value="jupiter #1" />
 
     <label for="description">Description :</label>
-    <input id="description" autocomplete="off" value="jupiter #1" />
+    <input
+      id="description"
+      autocomplete="off"
+      value="Jupiter is the fifth planet from the Sun and the largest in the Solar System. "
+    />
 
-    <label for="properties">Traits :</label><br />
-    <textarea id="properties" autocomplete="off" style="width: 170px" rows="5">
+    <label for="attributes">Traits :</label><br />
+    <textarea id="attributes" autocomplete="off" style="width: 170px" rows="5">
 [{"trait_type": "rarity","value": "normal"}]</textarea
     ><br />
 
@@ -48,15 +48,26 @@
     <script>
       async function onSubmit() {
         try {
-          const { uploadUrl, tokenId, name, description, propertiesJSON } =
+          const { baseUri, tokenId, name, description, attributes } =
             validateAndGetValue();
 
-          await postData(uploadUrl, {
-            tokenId,
-            name,
-            description,
-            properties: propertiesJSON,
-          });
+          const imageInput = document.getElementById("image");
+          if (!imageInput.files[0]) {
+            throw new Error("please select image to upload");
+          }
+          const formData = new FormData();
+          formData.append("image", imageInput.files[0]);
+          formData.append("baseUri", baseUri);
+          formData.append("tokenId", tokenId);
+          formData.append("name", name);
+          formData.append("description", description);
+          formData.append("attributes", attributes);
+          const res = await postFormData(`${baseUri}metadata`, formData);
+
+          const metadataUrl = `${baseUri}metadata/${tokenId}`;
+          document.getElementById(
+            "result"
+          ).innerHTML = `<p>upload success!, please visit <a target="_blank" href="${metadataUrl}">${metadataUrl}</a></p>`;
         } catch (e) {
           console.log(e);
           alert(e.message);
@@ -64,9 +75,9 @@
       }
 
       function validateAndGetValue() {
-        const uploadUrl = document.getElementById("uploadUrl").value;
-        if (!uploadUrl) {
-          throw new Error("please fill in the `uploadUrl`");
+        const baseUri = document.getElementById("baseUri").value;
+        if (!baseUri) {
+          throw new Error("please fill in the `baseUri`");
         }
         const tokenId = document.getElementById("tokenId").value;
         if (!tokenId) {
@@ -80,32 +91,29 @@
         if (!description) {
           throw new Error("please fill in the `description`");
         }
-        const properties = document.getElementById("properties").value;
-        let propertiesJSON = [];
-        if (properties) {
+        let attributes = document.getElementById("attributes").value;
+        if (attributes) {
           try {
-            propertiesJSON = JSON.parse(properties);
+            JSON.parse(attributes);
           } catch (e) {
-            throw new Error("`properties` cannot be convert to JSON");
+            throw new Error("`attributes` cannot be convert to JSON");
           }
+        } else {
+          attributes = "[]";
         }
 
-        return { uploadUrl, tokenId, name, description, propertiesJSON };
+        return { baseUri, tokenId, name, description, attributes };
       }
 
-      async function postData(url = "", data = {}) {
+      async function postFormData(url = "", formdata) {
         const response = await fetch(url, {
           method: "POST",
           mode: "cors",
           cache: "no-cache",
           credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
           redirect: "follow",
           referrerPolicy: "no-referrer",
-          body: JSON.stringify(data),
+          body: formdata,
         });
         return response.json();
       }
