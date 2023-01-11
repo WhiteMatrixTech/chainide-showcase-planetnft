@@ -3,10 +3,10 @@ export interface Metadata {
   name: string;
   description: string;
   image: string;
-  properties: Properties[];
+  attributes: Attributes[];
 }
 
-export interface Properties {
+export interface Attributes {
   trait_type: string;
   value: string;
 }

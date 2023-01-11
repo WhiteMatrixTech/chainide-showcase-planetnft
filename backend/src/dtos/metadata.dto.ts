@@ -1,4 +1,4 @@
-import { Properties } from '@/interfaces/metadata.interface';
+import { Aroperties } from '@/interfaces/metadata.interface';
 import { IsNumber, IsString } from 'class-validator';
 
 export class UploadMetadataDto {
@@ -13,5 +13,5 @@ export class UploadMetadataDto {
 
   public baseUri: string;
 
-  public properties: Properties;
+  public attributes: Attributes;
 }
