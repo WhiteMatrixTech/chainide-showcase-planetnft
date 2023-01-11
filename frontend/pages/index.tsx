@@ -27,6 +27,7 @@ export default function Home() {
     setCurrentAddress(await signer.getAddress());
   }, []);
 
+  const [openseaUrl, setOpenSeaUrl] = useState();
   const mint = useCallback(async () => {
     if (!currentSigner) {
       alert("please connect wallet!");
@@ -41,7 +42,13 @@ export default function Home() {
         currentSigner
       );
       const count = 1;
-      await contract.mint(count, { value: planetPerPrice.mul(count) });
+      const transaction = await contract.mint(count, {
+        value: planetPerPrice.mul(count),
+      });
+      const res = await transaction.wait(1);
+      const mintedTokenId = res.events[0].args[2] as ethers.BigNumber;
+      const openseaUrl = `https://testnets.opensea.io/assets/goerli/${planetContractAddress}/${mintedTokenId.toString()}`;
+      setOpenSeaUrl(openseaUrl);
     } catch (e) {
       alert(e.message);
       console.log(e);
@@ -154,6 +161,17 @@ export default function Home() {
                       {loading && <Loading />}
                       mint 1 NFT
                     </button>
+                  </div>
+                  <div className="mt-8 flex gap-x-4 sm:justify-center">
+                    {openseaUrl && (
+                      <p className="text-[#1e9427]">
+                        mint success! view{" "}
+                        <a href={openseaUrl} target="_blank" rel="noreferrer">
+                          {openseaUrl}
+                        </a>{" "}
+                        to see details
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">

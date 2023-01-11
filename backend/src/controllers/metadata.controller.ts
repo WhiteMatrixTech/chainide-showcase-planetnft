@@ -9,6 +9,7 @@ class MetadataController {
   public getMetadata = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const metadata: Metadata = await this.metadataService.getMetadata(req.params.tokenId);
+      console.log(metadata.attributes);
       metadata.attributes = JSON.parse(metadata.attributes);
       res.status(200).json(metadata);
     } catch (error) {
@@ -25,7 +26,7 @@ class MetadataController {
         name: metadata.name,
         description: metadata.description,
         attributes: metadata.attributes,
-        image: `${metadata.baseUri}${file.filename}`,
+        image: `${metadata.baseUri}/${file.filename}`,
       });
       res.status(200).json({});
     } catch (error) {
