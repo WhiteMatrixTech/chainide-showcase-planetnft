@@ -10,7 +10,9 @@ class MetadataController {
     try {
       const metadata: Metadata = await this.metadataService.getMetadata(req.params.tokenId);
       console.log(metadata.attributes);
-      metadata.attributes = JSON.parse(metadata.attributes);
+      try {
+        metadata.attributes = JSON.parse(metadata.attributes);
+      } catch (e) {}
       res.status(200).json(metadata);
     } catch (error) {
       next(error);
