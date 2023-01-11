@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
-import moon from "../styles/imgs/moon.jpg";
+import moon from "../styles/imgs/moon.png";
 import {
   planetContractAbi,
   planetContractAddress,
@@ -16,21 +16,48 @@ export default function Home() {
     undefined | ethers.providers.JsonRpcSigner
   >();
   const [currentAddress, setCurrentAddress] = useState<undefined | string>();
+  const [currentNetwork, setCurrentNetwork] = useState<undefined | string>();
   const [loading, setLoading] = useState(false);
   const connectWallet = useCallback(async () => {
     const provider = new ethers.providers.Web3Provider(
       (window as any).ethereum
     );
     await provider.send("eth_requestAccounts", []);
+    await provider.send("wallet_addEthereumChain", [
+      {
+        chainId: "0x13881",
+        rpcUrls: ["https://matic-testnet-archive-rpc.bwarelabs.com"],
+        chainName: "Mumbai",
+        nativeCurrency: {
+          name: "MATIC",
+          symbol: "MATIC",
+          decimals: 18,
+        },
+        blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+      },
+    ]);
+    provider.on("chainChanged", (chainId) => {
+      // Handle the new chain.
+      // Correctly handling chain changes can be complicated.
+      // We recommend reloading the page unless you have good reason not to.
+      window.location.reload();
+    });
+    const network = await provider.getNetwork();
+    setCurrentNetwork(network.name);
     const signer = provider.getSigner();
     setCurrentSigner(signer);
     setCurrentAddress(await signer.getAddress());
   }, []);
 
-  const [openseaUrl, setOpenSeaUrl] = useState();
+  const [openseaUrl, setOpenSeaUrl] = useState<undefined | string>();
   const mint = useCallback(async () => {
     if (!currentSigner) {
       alert("please connect wallet!");
+      return;
+    }
+
+    if (currentNetwork !== "maticmum") {
+      alert("please connect `maticmum`!");
       return;
     }
 
@@ -103,14 +130,14 @@ export default function Home() {
               aria-label="Global"
             >
               <div className="flex min-w-0 flex-1 justify-end">
-                {currentAddress ? (
-                  currentAddress
+                {currentAddress && "maticmum" === currentNetwork ? (
+                  `${currentNetwork}:${currentAddress}`
                 ) : (
                   <button
                     onClick={connectWallet}
                     className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20"
                   >
-                    connect
+                    Connect maticmum
                   </button>
                 )}
               </div>
@@ -124,7 +151,7 @@ export default function Home() {
                 <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                   <div className="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                     <span className="text-gray-600">
-                      This is the showcase of chainIDE for nft developing.{" "}
+                      ChainIDE provides this showcase for NFT development.{" "}
                       <a
                         href="https://chainide.com"
                         target="_blank"
@@ -132,7 +159,7 @@ export default function Home() {
                         rel="noreferrer"
                       >
                         <span className="absolute inset-0" aria-hidden="true" />
-                        Learn More About ChainIDE{" "}
+                        Learn more about ChainIDE.{" "}
                         <span aria-hidden="true">&rarr;</span>
                       </a>
                     </span>
@@ -147,10 +174,10 @@ export default function Home() {
                       src={moon}
                       alt="moon"
                       width={300}
-                      className="m-auto"
+                      className="m-auto py-[50px]"
                     />
                     <br />
-                    click button blow, to mint one planetNFT
+                    To begin minting a Planet NFT, click the button below.
                   </p>
                   <div className="mt-8 flex gap-x-4 sm:justify-center">
                     <button
@@ -159,7 +186,7 @@ export default function Home() {
                       className="inline-flex items-center gap-x-0.5 rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
                     >
                       {loading && <Loading />}
-                      mint 1 NFT
+                      Mint Now
                     </button>
                   </div>
                   <div className="mt-8 flex gap-x-4 sm:justify-center">
