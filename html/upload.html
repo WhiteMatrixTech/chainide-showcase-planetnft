@@ -67,9 +67,8 @@
           const metadataUrl = `${baseUri}/metadata/${tokenId}`;
           document.getElementById(
             "result"
-          ).innerHTML = `<p>upload success!, please visit "${metadataUrl}"</p>`;
+          ).innerHTML = `<p>upload success!, check "${metadataUrl}"</p>`;
         } catch (e) {
-          console.log(e);
           alert(e.message);
         }
       }
