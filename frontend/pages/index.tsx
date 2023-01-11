@@ -27,7 +27,7 @@ export default function Home() {
     setCurrentAddress(await signer.getAddress());
   }, []);
 
-  const [openseaUrl, setOpenSeaUrl] = useState();
+  const [openseaUrl, setOpenSeaUrl] = useState<undefined | string>();
   const mint = useCallback(async () => {
     if (!currentSigner) {
       alert("please connect wallet!");
@@ -110,7 +110,7 @@ export default function Home() {
                     onClick={connectWallet}
                     className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20"
                   >
-                    connect
+                    Wallet Connect
                   </button>
                 )}
               </div>
@@ -124,7 +124,7 @@ export default function Home() {
                 <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                   <div className="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                     <span className="text-gray-600">
-                      This is the showcase of chainIDE for nft developing.{" "}
+                      ChainIDE provides this showcase for NFT development.{" "}
                       <a
                         href="https://chainide.com"
                         target="_blank"
@@ -132,7 +132,7 @@ export default function Home() {
                         rel="noreferrer"
                       >
                         <span className="absolute inset-0" aria-hidden="true" />
-                        Learn More About ChainIDE{" "}
+                        Learn more about ChainIDE.{" "}
                         <span aria-hidden="true">&rarr;</span>
                       </a>
                     </span>
@@ -150,7 +150,7 @@ export default function Home() {
                       className="m-auto"
                     />
                     <br />
-                    click button blow, to mint one planetNFT
+                    To begin minting a Planet NFT, click the button below.
                   </p>
                   <div className="mt-8 flex gap-x-4 sm:justify-center">
                     <button
@@ -159,13 +159,13 @@ export default function Home() {
                       className="inline-flex items-center gap-x-0.5 rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
                     >
                       {loading && <Loading />}
-                      mint 1 NFT
+                      Mint Now
                     </button>
                   </div>
                   <div className="mt-8 flex gap-x-4 sm:justify-center">
                     {openseaUrl && (
                       <p className="text-[#1e9427]">
-                        mint success! view{" "}
+                        mint success! check{" "}
                         <a href={openseaUrl} target="_blank" rel="noreferrer">
                           {openseaUrl}
                         </a>{" "}
