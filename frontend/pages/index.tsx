@@ -94,7 +94,7 @@ export default function Home() {
       const openseaUrl = `https://testnets.opensea.io/assets/mumbai/${planetContractAddress}/${mintedTokenId.toString()}`;
       setOpenSeaUrl(openseaUrl);
     } catch (e) {
-      alert(e.message);
+      alert((e as any).message);
       console.log(e);
     } finally {
       setLoading(false);
