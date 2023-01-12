@@ -22,4 +22,4 @@ yarn build
 yarn start
 ```
 
-3. Open http://localhost:8080
+3. Open http://localhost:3000
