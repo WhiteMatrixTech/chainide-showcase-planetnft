@@ -1,31 +1,25 @@
 # chainIDE showcase planetnft
 
-this is a project for chainIDE showcase.
+This is a project for ChainIDE showcase.
 
 ### develop
 
-1. install dependence
-
-in project root directory:
+1. Build & start backend
 
 ```
+cd backend
 yarn install
-
-npm install pm2 -g
-
-npm install serve -g
-```
-
-2. build & start backend
-
-```
 yarn build:back
 yarn start:back
 ```
 
-3. build & start frontend
+2. Build & start frontend
 
 ```
+cd frontend
+yarn install
 yarn build:front
 yarn start:front
 ```
+
+3. Open http://localhost:8080
