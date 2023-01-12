@@ -1,4 +1,4 @@
-# chainIDE showcase planetnft
+# ChainIDE showcase planetnft
 
 This is a project for ChainIDE showcase.
 
@@ -13,6 +13,8 @@ yarn build
 yarn start
 ```
 
+URL: http://localhost:3000
+
 2. Build & start frontend
 
 ```
@@ -22,4 +24,4 @@ yarn build
 yarn start
 ```
 
-3. Open http://localhost:3000
+URL: http://localhost:3001
