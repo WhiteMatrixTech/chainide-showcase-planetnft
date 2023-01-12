@@ -10,16 +10,22 @@ in project root directory:
 
 ```
 yarn install
+
+npm install pm2 -g
+
+npm install serve -g
 ```
 
-2. start backend
+2. build & start backend
 
 ```
-yarn dev:back
+yarn build:back
+yarn start:back
 ```
 
-3.  start frontend
+3. build & start frontend
 
 ```
-yarn dev:front
+yarn build:front
+yarn start:front
 ```

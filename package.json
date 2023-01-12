@@ -10,8 +10,10 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:front": "yarn workspace frontend run dev",
-    "dev:back": "yarn workspace backend run dev"
+    "build:front": "yarn workspace frontend run preexport && yarn workspace frontend run export",
+    "start:front": "yarn workspace frontend run start",
+    "build:back": "yarn workspace backend run build",
+    "start:back": "yarn workspace backend run start"
   },
   "keywords": [],
   "author": "",
