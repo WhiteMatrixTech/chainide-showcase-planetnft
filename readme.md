@@ -13,7 +13,7 @@ yarn build
 yarn start
 ```
 
-URL: http://localhost:3000
+URL: http://localhost:3001
 
 2. Build & start frontend
 
@@ -24,4 +24,4 @@ yarn build
 yarn start
 ```
 
-URL: http://localhost:3001
+URL: http://localhost:3000
