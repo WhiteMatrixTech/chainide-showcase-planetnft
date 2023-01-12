@@ -12,6 +12,9 @@ import {
 import { Loading } from "../components/loading";
 
 export default function Home() {
+  const [currentProvider, setCurrentProvider] = useState<
+    undefined | ethers.providers.Web3Provider
+  >();
   const [currentSigner, setCurrentSigner] = useState<
     undefined | ethers.providers.JsonRpcSigner
   >();
@@ -19,45 +22,57 @@ export default function Home() {
   const [currentNetwork, setCurrentNetwork] = useState<undefined | string>();
   const [loading, setLoading] = useState(false);
   const connectWallet = useCallback(async () => {
-    const provider = new ethers.providers.Web3Provider(
-      (window as any).ethereum
-    );
-    await provider.send("eth_requestAccounts", []);
-    await provider.send("wallet_addEthereumChain", [
-      {
-        chainId: "0x13881",
-        rpcUrls: ["https://matic-testnet-archive-rpc.bwarelabs.com"],
-        chainName: "Mumbai",
-        nativeCurrency: {
-          name: "MATIC",
-          symbol: "MATIC",
-          decimals: 18,
-        },
-        blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
-      },
-    ]);
-    provider.on("chainChanged", (chainId) => {
-      // Handle the new chain.
-      // Correctly handling chain changes can be complicated.
-      // We recommend reloading the page unless you have good reason not to.
-      window.location.reload();
-    });
-    const network = await provider.getNetwork();
-    setCurrentNetwork(network.name);
-    const signer = provider.getSigner();
+    if (!currentProvider) {
+      const provider = new ethers.providers.Web3Provider(
+        (window as any).ethereum
+      );
+      (window as any).ethereum.on("chainChanged", () => {
+        window.location.reload();
+      });
+      (window as any).ethereum.on("accountsChanged", async () => {
+        window.location.reload();
+      });
+      setCurrentProvider(provider);
+    }
+    await currentProvider?.send("eth_requestAccounts", []);
+    const network = await currentProvider?.getNetwork();
+    setCurrentNetwork(network?.name);
+    const signer = currentProvider?.getSigner();
     setCurrentSigner(signer);
-    setCurrentAddress(await signer.getAddress());
-  }, []);
+    setCurrentAddress(await signer?.getAddress());
+  }, [currentProvider]);
+
+  const switchToMumbai = useCallback(async () => {
+    if (currentProvider) {
+      try {
+        await currentProvider.send("wallet_addEthereumChain", [
+          {
+            chainId: "0x13881",
+            rpcUrls: ["https://matic-testnet-archive-rpc.bwarelabs.com"],
+            chainName: "Mumbai",
+            nativeCurrency: {
+              name: "MATIC",
+              symbol: "MATIC",
+              decimals: 18,
+            },
+            blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+          },
+        ]);
+        const network = await currentProvider?.getNetwork();
+        setCurrentNetwork(network?.name);
+        const signer = currentProvider?.getSigner();
+        setCurrentSigner(signer);
+        setCurrentAddress(await signer?.getAddress());
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [currentProvider]);
 
   const [openseaUrl, setOpenSeaUrl] = useState<undefined | string>();
   const mint = useCallback(async () => {
     if (!currentSigner) {
       alert("please connect wallet!");
-      return;
-    }
-
-    if (currentNetwork !== "maticmum") {
-      alert("please connect `maticmum`!");
       return;
     }
 
@@ -87,6 +102,7 @@ export default function Home() {
   useEffect(() => {
     connectWallet();
   }, [connectWallet]);
+
   return (
     <>
       <Head>
@@ -130,14 +146,14 @@ export default function Home() {
               aria-label="Global"
             >
               <div className="flex min-w-0 flex-1 justify-end">
-                {currentAddress && "maticmum" === currentNetwork ? (
+                {currentAddress ? (
                   `${currentNetwork}:${currentAddress}`
                 ) : (
                   <button
                     onClick={connectWallet}
                     className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20"
                   >
-                    Connect maticmum
+                    Wallet connect
                   </button>
                 )}
               </div>
@@ -169,7 +185,7 @@ export default function Home() {
                   <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">
                     Planet NFT
                   </h1>
-                  <p className="mt-6 text-lg leading-8 text-gray-600 text-center">
+                  <div className="mt-6 text-lg leading-8 text-gray-600 text-center">
                     <Image
                       src={moon}
                       alt="moon"
@@ -177,13 +193,30 @@ export default function Home() {
                       className="m-auto py-[50px]"
                     />
                     <br />
-                    To begin minting a Planet NFT, click the button below.
-                  </p>
+
+                    {currentNetwork === "maticmum" ? (
+                      <div>
+                        To begin minting a Planet NFT, click the button below.
+                      </div>
+                    ) : (
+                      <div>
+                        To claim this NFT, please switch to{" "}
+                        <button
+                          onClick={switchToMumbai}
+                          className="text-sky-500 background-transparent font-bold outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 underline"
+                          type="button"
+                        >
+                          Mumbai
+                        </button>
+                        .
+                      </div>
+                    )}
+                  </div>
                   <div className="mt-8 flex gap-x-4 sm:justify-center">
                     <button
                       onClick={mint}
-                      disabled={loading}
-                      className="inline-flex items-center gap-x-0.5 rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
+                      disabled={loading || currentNetwork !== "maticmum"}
+                      className=" disabled:opacity-75 inline-flex items-center gap-x-0.5 rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
                     >
                       {loading && <Loading />}
                       Mint Now
