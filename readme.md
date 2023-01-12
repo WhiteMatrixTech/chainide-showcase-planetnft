@@ -9,8 +9,8 @@ This is a project for ChainIDE showcase.
 ```
 cd backend
 yarn install
-yarn build:back
-yarn start:back
+yarn build
+yarn start
 ```
 
 2. Build & start frontend
@@ -18,8 +18,8 @@ yarn start:back
 ```
 cd frontend
 yarn install
-yarn build:front
-yarn start:front
+yarn build
+yarn start
 ```
 
 3. Open http://localhost:8080
