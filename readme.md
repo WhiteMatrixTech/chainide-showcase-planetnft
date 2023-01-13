@@ -4,7 +4,7 @@ This is a project for ChainIDE showcase.
 
 ### develop
 
-#### 1. Build & start backend
+#### 1. Build & start backend (NFT Metadata Storage)
 
 ```
 cd backend
@@ -15,7 +15,7 @@ yarn start
 
 URL: http://localhost:3001
 
-#### 2. Build & start frontend
+#### 2. Build & start frontend (NFT Mint Page)
 
 ```
 cd frontend
