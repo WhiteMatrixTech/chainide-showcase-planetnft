@@ -165,7 +165,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <main>
+        <main className="w-full">
           <div className="relative px-6 lg:px-8">
             <div className="mx-auto max-w-3xl pt-3 pb-5 sm:pt-10 sm:pb-10">
               <div>
