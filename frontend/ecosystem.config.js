@@ -20,6 +20,12 @@ module.exports = {
       merge_logs: true, // if true, stdout and stderr will be merged and sent to pm2 log
       output: './logs/access.log', // pm2 log file
       error: './logs/error.log', // pm2 error log file
+      env: {
+        PM2_SERVE_PATH: 'out',
+        PM2_SERVE_PORT: 3000,
+        PM2_SERVE_SPA: 'true',
+        PM2_SERVE_HOMEPAGE: '/index.html'
+      }
     },
   ],
 };

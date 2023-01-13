@@ -1,10 +1,10 @@
-# chainIDE showcase planetnft
+# ChainIDE showcase planetnft
 
 This is a project for ChainIDE showcase.
 
 ### develop
 
-1. Build & start backend
+#### 1. Build & start backend (NFT Metadata Storage)
 
 ```
 cd backend
@@ -13,7 +13,9 @@ yarn build
 yarn start
 ```
 
-2. Build & start frontend
+URL: http://localhost:3001
+
+#### 2. Build & start frontend (NFT Mint Page)
 
 ```
 cd frontend
@@ -22,4 +24,4 @@ yarn build
 yarn start
 ```
 
-3. Open http://localhost:8080
+URL: http://localhost:3000
