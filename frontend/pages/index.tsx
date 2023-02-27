@@ -43,29 +43,46 @@ export default function Home() {
   }, [currentProvider]);
 
   const switchToMumbai = useCallback(async () => {
-    if (currentProvider) {
-      try {
-        await currentProvider.send("wallet_addEthereumChain", [
-          {
-            chainId: "0x13881",
-            rpcUrls: ["https://matic-testnet-archive-rpc.bwarelabs.com"],
-            chainName: "Mumbai",
-            nativeCurrency: {
-              name: "MATIC",
-              symbol: "MATIC",
-              decimals: 18,
-            },
-            blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
-          },
-        ]);
-        const network = await currentProvider?.getNetwork();
-        setCurrentNetwork(network?.name);
-        const signer = currentProvider?.getSigner();
-        setCurrentSigner(signer);
-        setCurrentAddress(await signer?.getAddress());
-      } catch (e) {
-        console.log(e);
+    if ((window as any).ethereum) {
+      const chainId = "0x13881"; // Mumbai
+      const currentChainId = await (window as any).ethereum.request({
+        method: "eth_chainId",
+      });
+      if (currentChainId !== chainId) {
+        try {
+          await (window as any).ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: chainId }],
+          });
+        } catch (err) {
+          // This error code indicates that the chain has not been added to MetaMask
+          if ((err as any).code === 4902) {
+            await (window as any).ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainName: "Mumbai",
+                  chainId: chainId,
+                  nativeCurrency: {
+                    name: "MATIC",
+                    decimals: 18,
+                    symbol: "MATIC",
+                  },
+                  rpcUrls: [
+                    "https://endpoints.omniatech.io/v1/matic/mumbai/public",
+                  ],
+                },
+              ],
+            });
+          }
+        }
       }
+
+      const network = await currentProvider?.getNetwork();
+      setCurrentNetwork(network?.name);
+      const signer = currentProvider?.getSigner();
+      setCurrentSigner(signer);
+      setCurrentAddress(await signer?.getAddress());
     }
   }, [currentProvider]);
 
