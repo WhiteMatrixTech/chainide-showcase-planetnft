@@ -14,7 +14,6 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "./libs/ERC721A.sol";
 import "./interfaces/IPlanet.sol";
 
-
 contract Planet is IPlanet, Ownable, ERC721A, AccessControl, ReentrancyGuard {
     uint256 public immutable maxSupply;
     uint256 public constant MAX_BATCH_SIZE = 5;
@@ -24,6 +23,7 @@ contract Planet is IPlanet, Ownable, ERC721A, AccessControl, ReentrancyGuard {
     uint256 public salePrice;
     string public baseURI;
 
+    // 1000000000
     constructor(
         uint256 _salePrice,
         uint256 _maxSupply
@@ -33,19 +33,13 @@ contract Planet is IPlanet, Ownable, ERC721A, AccessControl, ReentrancyGuard {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    function mint(uint256 _quantity)
-        external
-        payable
-        nonReentrant
-    {
+    function mint(uint256 _quantity) external payable nonReentrant {
         require(totalSupply() + _quantity <= maxSupply, "Max supply exceed");
         uint256 totalPrice = salePrice * _quantity;
         require(msg.value >= totalPrice, "Not enough funds");
         _batchMint(msg.sender, _quantity);
         refundIfOver(totalPrice);
     }
-
-
 
     function withdraw() external {
         uint256 amount = address(this).balance;
@@ -60,10 +54,11 @@ contract Planet is IPlanet, Ownable, ERC721A, AccessControl, ReentrancyGuard {
         SafeERC20.safeTransfer(token, payable(owner()), amount);
     }
 
-    function setBaseURI(string calldata uri) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setBaseURI(
+        string calldata uri
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         baseURI = uri;
     }
-
 
     function grantAdminRole(address account) external onlyOwner {
         _grantRole(DEFAULT_ADMIN_ROLE, account);
@@ -100,7 +95,9 @@ contract Planet is IPlanet, Ownable, ERC721A, AccessControl, ReentrancyGuard {
         }
     }
 
-    function supportsInterface(bytes4 interfaceId) public view override(AccessControl, ERC721A) returns (bool) {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view override(AccessControl, ERC721A) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }

@@ -36,6 +36,8 @@ export default function Home() {
     }
     await currentProvider?.send("eth_requestAccounts", []);
     const network = await currentProvider?.getNetwork();
+    console.log(network);
+
     setCurrentNetwork(network?.name);
     const signer = currentProvider?.getSigner();
     setCurrentSigner(signer);
@@ -44,10 +46,12 @@ export default function Home() {
 
   const switchToMumbai = useCallback(async () => {
     if ((window as any).ethereum) {
-      const chainId = "0x13881"; // Mumbai
+      const chainId = "0x61"; // BSC testnet
       const currentChainId = await (window as any).ethereum.request({
         method: "eth_chainId",
       });
+      console.log(currentChainId);
+
       if (currentChainId !== chainId) {
         try {
           await (window as any).ethereum.request({
@@ -61,16 +65,14 @@ export default function Home() {
               method: "wallet_addEthereumChain",
               params: [
                 {
-                  chainName: "Mumbai",
+                  chainName: "bnbt",
                   chainId: chainId,
                   nativeCurrency: {
-                    name: "MATIC",
+                    name: "BSC Testnet",
                     decimals: 18,
-                    symbol: "MATIC",
+                    symbol: "BNB",
                   },
-                  rpcUrls: [
-                    "https://endpoints.omniatech.io/v1/matic/mumbai/public",
-                  ],
+                  rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
                 },
               ],
             });
@@ -88,6 +90,8 @@ export default function Home() {
 
   const [openseaUrl, setOpenSeaUrl] = useState<undefined | string>();
   const mint = useCallback(async () => {
+    console.log("mint");
+
     if (!currentSigner) {
       alert("please connect wallet!");
       return;
@@ -108,7 +112,7 @@ export default function Home() {
       const mintedTokenId = res.events.filter(
         (ev: any) => ev.event === "Transfer"
       )[0].args[2] as ethers.BigNumber;
-      const openseaUrl = `https://testnets.opensea.io/assets/mumbai/${planetContractAddress}/${mintedTokenId.toString()}`;
+      const openseaUrl = `https://testnets.opensea.io/assets/bnbt/${planetContractAddress}/${mintedTokenId.toString()}`;
       setOpenSeaUrl(openseaUrl);
     } catch (e) {
       alert((e as any).message);
@@ -216,7 +220,7 @@ export default function Home() {
                     />
                     <br />
 
-                    {currentNetwork === "maticmum" ? (
+                    {currentNetwork === "bnbt" ? (
                       <div>
                         To begin minting a Planet NFT, click the button below.
                       </div>
@@ -228,7 +232,7 @@ export default function Home() {
                           className="text-sky-500 background-transparent font-bold outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 underline"
                           type="button"
                         >
-                          Mumbai
+                          BSC Testnet
                         </button>
                         .
                       </div>
@@ -237,7 +241,7 @@ export default function Home() {
                   <div className="mt-8 flex gap-x-4 sm:justify-center">
                     <button
                       onClick={mint}
-                      disabled={loading || currentNetwork !== "maticmum"}
+                      disabled={loading || currentNetwork !== "bnbt"}
                       className=" disabled:opacity-75 inline-flex items-center gap-x-0.5 rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
                     >
                       {loading && <Loading />}
