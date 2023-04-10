@@ -8,8 +8,8 @@ module.exports = {
   apps: [
     {
       name: 'backend', // pm2 start App name
-      script: 'ts-node', // ts-node
-      args: '-r tsconfig-paths/register --transpile-only src/server.ts', // ts-node args
+      script: 'nodemon', // ts-node
+      args: 'dist/server.js', // ts-node args
       exec_mode: 'cluster', // 'cluster' or 'fork'
       instance_var: 'INSTANCE_ID', // instance variable
       instances: 1, // pm2 instance count
