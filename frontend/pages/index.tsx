@@ -50,10 +50,12 @@ export default function Home() {
       const currentChainId = await (window as any).ethereum.request({
         method: "eth_chainId",
       });
-      console.log(currentChainId);
+      console.log(currentChainId, chainId);
 
       if (currentChainId !== chainId) {
         try {
+          // metamask new version bug, can not switch -> https://github.com/MetaMask/metamask-extension/issues/18509
+          // should delete netwowork.then add
           await (window as any).ethereum.request({
             method: "wallet_switchEthereumChain",
             params: [{ chainId: chainId }],
@@ -112,7 +114,7 @@ export default function Home() {
       const mintedTokenId = res.events.filter(
         (ev: any) => ev.event === "Transfer"
       )[0].args[2] as ethers.BigNumber;
-      const openseaUrl = `https://testnets.opensea.io/assets/bnbt/${planetContractAddress}/${mintedTokenId.toString()}`;
+      const openseaUrl = `https://testnets.opensea.io/assets/bsc-testnet/${planetContractAddress}/${mintedTokenId.toString()}`;
       setOpenSeaUrl(openseaUrl);
     } catch (e) {
       alert((e as any).message);
